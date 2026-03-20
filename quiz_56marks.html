@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embryology & Reproductive Medicine — 56-Mark Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ec;
+    --surface: #ffffff;
+    --ink: #1a1714;
+    --ink-soft: #5c5650;
+    --accent: #2d5a4e;
+    --accent-light: #e8f1ef;
+    --border: #dedad3;
+    --correct: #1e5c3a;
+    --correct-bg: #edf7f1;
+    --wrong: #8b1a1a;
+    --wrong-bg: #fdf0f0;
+    --selected: #2d5a4e;
+    --selected-bg: #e8f1ef;
+    --sa-color: #4a3d7a;
+    --sa-light: #f0eef8;
+    --sa-border: #c5bde8;
+    --section-a: #3d4e6b;
+    --section-b: #5a3d6b;
+    --section-c: #6b5a3d;
+    --section-d: #3d6b5a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 100px;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: #f5f2ec;
+    padding: 40px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 40px);
+  }
+  header .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #8a8680;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 4vw, 36px);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  header h1 em { font-style: italic; color: #a8c5bb; }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 5px 14px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap { background: var(--border); height: 3px; position: sticky; top: 0; z-index: 100; }
+  .progress-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+  /* SECTION HEADERS */
+  .section-header {
+    margin: 48px 0 0;
+    padding: 20px 28px;
+    border-left: 4px solid;
+    background: var(--surface);
+    border-radius: 2px 8px 8px 2px;
+  }
+  .section-header.a { border-color: var(--section-a); }
+  .section-header.b { border-color: var(--section-b); }
+  .section-header.c { border-color: var(--section-c); }
+  .section-header.d { border-color: var(--section-d); }
+  .section-header.sa { border-color: var(--sa-color); background: var(--sa-light); }
+  .section-header .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .section-header h2 { font-family: 'DM Serif Display', serif; font-size: 20px; }
+  .section-header.a h2 { color: var(--section-a); }
+  .section-header.b h2 { color: var(--section-b); }
+  .section-header.c h2 { color: var(--section-c); }
+  .section-header.d h2 { color: var(--section-d); }
+  .section-header.sa h2 { color: var(--sa-color); }
+
+  /* MC QUESTION CARD */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-top: 16px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .question-card:hover { box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .question-top {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #fff;
+    background: var(--ink-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-text { font-size: 15px; line-height: 1.6; font-weight: 500; }
+  .options { padding: 12px 24px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 7px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: transparent;
+    text-align: left;
+    width: 100%;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .option:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+  .option-letter { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--ink-soft); flex-shrink: 0; width: 18px; margin-top: 1px; }
+  .option.selected { border-color: var(--selected); background: var(--selected-bg); }
+  .option.selected .option-letter { color: var(--selected); }
+  .option.correct { border-color: var(--correct); background: var(--correct-bg); }
+  .option.correct .option-letter { color: var(--correct); }
+  .option.wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+  .option.wrong .option-letter { color: var(--wrong); }
+  .option:disabled { cursor: default; }
+  .option.reveal-correct { border-color: var(--correct); background: var(--correct-bg); opacity: 0.6; }
+  .feedback { margin: 0 24px 16px; padding: 10px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; display: none; }
+  .feedback.correct { background: var(--correct-bg); color: var(--correct); display: block; }
+  .feedback.wrong { background: var(--wrong-bg); color: var(--wrong); display: block; }
+
+  /* ─── SHORT ANSWER SECTION ─── */
+  .sa-part-header {
+    margin: 48px 0 0;
+    padding: 0;
+  }
+  .sa-divider {
+    border: none;
+    border-top: 2px dashed var(--sa-border);
+    margin: 48px 0 0;
+  }
+
+  .sa-card {
+    background: var(--surface);
+    border: 1px solid var(--sa-border);
+    border-radius: 10px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  .sa-card-header {
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid var(--sa-border);
+    background: var(--sa-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .sa-card-header .sa-q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #fff;
+    background: var(--sa-color);
+    padding: 3px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .sa-card-header .sa-title { font-size: 15px; font-weight: 600; color: var(--sa-color); line-height: 1.4; flex: 1; }
+  .sa-marks-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--sa-color);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .sa-body { padding: 20px 24px 24px; }
+  .sa-instruction {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* MATCHING UI */
+  .matching-table { width: 100%; border-collapse: collapse; }
+  .matching-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--sa-border);
+  }
+  .matching-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .matching-table tr:last-child td { border-bottom: none; }
+  .region-label { font-size: 14px; font-weight: 500; font-style: italic; }
+  .match-select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--sa-border);
+    border-radius: 6px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--ink);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235c5650' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .match-select:focus { outline: none; border-color: var(--sa-color); }
+  .match-select:disabled { background-color: #f0f0f0; cursor: default; }
+  .match-select.match-correct { border-color: var(--correct); background-color: var(--correct-bg); color: var(--correct); font-weight: 600; }
+  .match-select.match-wrong { border-color: var(--wrong); background-color: var(--wrong-bg); color: var(--wrong); }
+  .match-correct-ans { font-size: 12px; color: var(--correct); font-style: italic; margin-top: 4px; display: none; }
+
+  /* TEXT AREA */
+  .sa-textarea {
+    width: 100%;
+    min-height: 130px;
+    padding: 14px;
+    border: 1.5px solid var(--sa-border);
+    border-radius: 8px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg);
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  .sa-textarea:focus { outline: none; border-color: var(--sa-color); background: #fff; }
+  .sa-textarea:disabled { background: #f5f5f5; color: var(--ink-soft); cursor: default; }
+  .char-hint { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-top: 6px; }
+
+  /* AI FEEDBACK PANEL */
+  .ai-feedback-panel {
+    margin-top: 16px;
+    border: 1.5px solid var(--sa-border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+  }
+  .ai-feedback-panel.show { display: block; }
+  .ai-feedback-top {
+    background: var(--sa-light);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--sa-border);
+  }
+  .ai-feedback-top .ai-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--sa-color);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .ai-score-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sa-color);
+  }
+  .ai-feedback-body { padding: 14px 16px; font-size: 14px; line-height: 1.6; color: var(--ink); }
+  .ai-feedback-body .criterion { margin-bottom: 8px; padding-left: 14px; border-left: 3px solid; }
+  .ai-feedback-body .criterion.got { border-color: var(--correct); }
+  .ai-feedback-body .criterion.missed { border-color: var(--wrong-bg); }
+
+  /* LOADING SPINNER */
+  .ai-loading {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0;
+    color: var(--sa-color);
+    font-size: 13px;
+  }
+  .ai-loading.show { display: flex; }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--sa-border);
+    border-top-color: var(--sa-color);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SCORE PANEL */
+  .score-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--ink);
+    color: #f5f2ec;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    z-index: 200;
+    min-width: 140px;
+    text-align: center;
+  }
+  .score-panel .score-label { font-size: 10px; letter-spacing: 2px; color: #8a8680; margin-bottom: 4px; text-transform: uppercase; }
+  .score-panel .score-val { font-size: 22px; font-weight: 500; color: #a8c5bb; }
+  .score-panel .score-sub { font-size: 11px; color: #8a8680; margin-top: 2px; }
+
+  /* SUBMIT */
+  .submit-wrap { text-align: center; margin-top: 48px; }
+  .submit-btn {
+    background: var(--ink); color: #f5f2ec; border: none;
+    padding: 16px 48px; border-radius: 8px;
+    font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s;
+  }
+  .submit-btn:hover { opacity: 0.85; }
+  .submit-btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* GRADING OVERLAY */
+  .grading-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(26,23,20,0.7);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    color: #f5f2ec;
+    text-align: center;
+  }
+  .grading-overlay.show { display: flex; }
+  .grading-spinner { width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #a8c5bb; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .grading-overlay h3 { font-family: 'DM Serif Display', serif; font-size: 24px; }
+  .grading-overlay p { font-family: 'DM Mono', monospace; font-size: 12px; color: #a8c5bb; letter-spacing: 1px; }
+
+  /* FINAL RESULTS */
+  .final-results {
+    display: none;
+    margin-top: 48px;
+    background: var(--ink);
+    color: #f5f2ec;
+    border-radius: 14px;
+    padding: 40px;
+    text-align: center;
+  }
+  .final-results.show { display: block; }
+  .final-results h3 { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 8px; }
+  .final-score-big { font-family: 'DM Mono', monospace; font-size: 64px; font-weight: 500; color: #a8c5bb; line-height: 1; margin: 20px 0 8px; }
+  .final-score-big span { font-size: 24px; color: #8a8680; }
+  .final-grade { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #8a8680; text-transform: uppercase; margin-bottom: 24px; }
+  .breakdown-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; }
+  .breakdown-item { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px; text-align: left; }
+  .breakdown-item .bi-label { font-size: 11px; color: #8a8680; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+  .breakdown-item .bi-score { font-family: 'DM Mono', monospace; font-size: 20px; color: #a8c5bb; }
+  .reset-btn {
+    margin-top: 28px; background: transparent; border: 1.5px solid rgba(255,255,255,0.25);
+    color: #f5f2ec; padding: 12px 32px; border-radius: 7px;
+    font-family: 'Instrument Sans', sans-serif; font-size: 14px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .reset-btn:hover { border-color: rgba(255,255,255,0.6); }
+
+  @media (max-width: 520px) {
+    .breakdown-grid { grid-template-columns: 1fr; }
+    .score-panel { bottom: 10px; right: 10px; }
+    .question-top { flex-direction: column; gap: 8px; }
+    .matching-table th, .matching-table td { padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Embryology &amp; Reproductive Medicine</div>
+  <h1>56-Mark <em>Quiz</em></h1>
+  <div class="header-meta">
+    <span class="meta-pill">40 MC — 40 MARKS</span>
+    <span class="meta-pill">3 SHORT ANSWER — 16 MARKS</span>
+    <span class="meta-pill">TOTAL: 56</span>
+  </div>
+</header>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar"></div>
+</div>
+
+<div class="container" id="quizContainer"></div>
+
+<!-- SHORT ANSWER SECTION -->
+<div class="container">
+  <hr class="sa-divider">
+
+  <div class="section-header sa" style="margin-top: 32px;">
+    <div class="section-num">Short Answer Section — 16 Marks Total</div>
+    <h2>Cardiovascular &amp; Respiratory Embryology — Written Responses</h2>
+  </div>
+
+  <!-- SA Q1: MATCHING -->
+  <div class="sa-card" style="margin-top: 16px;">
+    <div class="sa-card-header">
+      <span class="sa-q-num">SA·1</span>
+      <span class="sa-title">Matching: Adult Derivatives of the Primitive Heart Tube</span>
+      <span class="sa-marks-badge">5 marks</span>
+    </div>
+    <div class="sa-body">
+      <p class="sa-instruction">Match each region of the primitive heart tube (cranial to caudal) to its correct adult derivative. Select one answer per row.</p>
+      <table class="matching-table" id="matchingTable">
+        <thead>
+          <tr>
+            <th style="width:42%">Region</th>
+            <th>Adult Derivative</th>
+          </tr>
+        </thead>
+        <tbody id="matchingBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SA Q2: ATRIAL SEPTATION -->
+  <div class="sa-card" style="margin-top: 16px;">
+    <div class="sa-card-header">
+      <span class="sa-q-num">SA·2</span>
+      <span class="sa-title">Atrial Septation: Steps 1–6</span>
+      <span class="sa-marks-badge">6 marks</span>
+    </div>
+    <div class="sa-body">
+      <p class="sa-instruction">In order, list and briefly describe all 6 steps of atrial septation (cardiac partitioning). 1 mark per step correctly identified or described. (1 mark each)</p>
+      <textarea class="sa-textarea" id="saAtrial" placeholder="Step 1: …&#10;Step 2: …&#10;Step 3: …&#10;Step 4: …&#10;Step 5: …&#10;Step 6: …"></textarea>
+      <div class="char-hint">Tip: You don't need to be word-perfect — key concepts are what count.</div>
+      <div class="ai-loading" id="loadingAtrial">
+        <div class="spinner"></div>
+        <span>AI is grading your response…</span>
+      </div>
+      <div class="ai-feedback-panel" id="feedbackAtrial">
+        <div class="ai-feedback-top">
+          <span class="ai-label">✦ AI Feedback</span>
+          <span class="ai-score-badge" id="scoreAtrial">— / 6</span>
+        </div>
+        <div class="ai-feedback-body" id="feedbackAtrialBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SA Q3: DIAPHRAGM -->
+  <div class="sa-card" style="margin-top: 16px;">
+    <div class="sa-card-header">
+      <span class="sa-q-num">SA·3</span>
+      <span class="sa-title">Development of the Diaphragm</span>
+      <span class="sa-marks-badge">5 marks</span>
+    </div>
+    <div class="sa-body">
+      <p class="sa-instruction">Name all four embryonic components that form the diaphragm and describe what each one contributes. (1 mark per component + contribution, up to 5 marks)</p>
+      <textarea class="sa-textarea" id="saDiaphragm" placeholder="1. [Component name]: contributes…&#10;2. [Component name]: contributes…&#10;3. [Component name]: contributes…&#10;4. [Component name]: contributes…"></textarea>
+      <div class="char-hint">Tip: Name each of the 4 components and briefly state what part of the diaphragm it forms.</div>
+      <div class="ai-loading" id="loadingDiaphragm">
+        <div class="spinner"></div>
+        <span>AI is grading your response…</span>
+      </div>
+      <div class="ai-feedback-panel" id="feedbackDiaphragm">
+        <div class="ai-feedback-top">
+          <span class="ai-label">✦ AI Feedback</span>
+          <span class="ai-score-badge" id="scoreDiaphragm">— / 5</span>
+        </div>
+        <div class="ai-feedback-body" id="feedbackDiaphragmBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="submit-wrap">
+    <button class="submit-btn" id="submitBtn" onclick="submitQuiz()" disabled>Submit Quiz</button>
+  </div>
+  <div class="final-results" id="finalResults">
+    <h3>Quiz Complete</h3>
+    <div class="final-score-big" id="finalScoreDisplay">— <span>/ 56</span></div>
+    <div class="final-grade" id="finalGrade">—</div>
+    <div class="breakdown-grid" id="breakdownGrid"></div>
+    <button class="reset-btn" onclick="resetQuiz()">Retake Quiz</button>
+  </div>
+</div>
+
+<div class="score-panel" id="scorePanel">
+  <div class="score-label">MC Score</div>
+  <div class="score-val" id="scoreLive">0 / 0</div>
+  <div class="score-sub" id="scorePct">answered: 0 / 40</div>
+</div>
+
+<div class="grading-overlay" id="gradingOverlay">
+  <div class="grading-spinner"></div>
+  <h3>Grading Your Answers</h3>
+  <p id="gradingStatus">Evaluating short answer responses…</p>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  MC QUESTIONS
+// ─────────────────────────────────────────────
+const QUESTIONS = [
+  // SECTION A — Reproductive Medicine
+  { s:0, q:"What is the primary mechanism by which Clomiphene citrate (Clomid) assists in ovulation induction?", opts:["It directly replaces LH in the bloodstream","It increases the production of FSH","It blocks the release of GnRH","It thins the cervical mucus"], ans:1 },
+  { s:0, q:"Which of the following is a specific risk associated with the use of recombinant FSH/LH for stronger ovarian stimulation?", opts:["Permanent infertility","Müllerian anomalies","Superovulation and multiple births","Immediate menopause"], ans:2 },
+  { s:0, q:"What is the approximate success rate for In Vitro Fertilization (IVF) according to the lecture notes?", opts:["10%","30%","50%","75%"], ans:1 },
+  { s:0, q:"How does Intracytoplasmic Sperm Injection (ICSI) differ from standard IVF?", opts:["Fertilization occurs inside the fallopian tubes","Multiple sperm are placed near the oocyte","One single sperm is injected directly into the oocyte","It is only used for female-factor infertility"], ans:2 },
+  { s:0, q:"Under what condition is Gamete Intrafallopian Transfer (GIFT) generally NOT used?", opts:["When the patient is over age 35","If the male partner has oligospermia","If the fallopian tubes are damaged or blocked","When the cause of infertility is 'unknown'"], ans:2 },
+  { s:0, q:"In gestational surrogacy, which of the following is true regarding the surrogate mother?", opts:["She provides the egg and carries the pregnancy","There is no genetic overlap between her and the baby","She must be a close relative of the intended parents","It is the only form of surrogacy legal in Canada"], ans:1 },
+  { s:0, q:"Based on Canadian law as noted in the lecture, which type of surrogacy is permitted?", opts:["Commercial surrogacy","Only altruistic surrogacy","All forms of surrogacy are illegal","Surrogacy is only legal for citizens of Mississauga"], ans:1 },
+  { s:0, q:"Structural issues like Müllerian anomalies and fibroids fall under which category of infertility?", opts:["Pre-gonadal (Endocrine)","Gonadal","Post-gonadal","Primary unknown"], ans:2 },
+  { s:0, q:"When both partners contribute to the cause of infertility, what percentage of cases does this represent?", opts:["38%","27%","20%","15%"], ans:1 },
+  { s:0, q:"At what stage of development does the embryo transfer typically occur during the IVF process?", opts:["Post-compaction","Pre-compaction","At the fetal stage","Immediately after birth"], ans:0 },
+  // SECTION B — Cardiovascular
+  { s:1, q:"Why is the cardiovascular system the first major system to function in the embryo?", opts:["Because the heart is the largest organ at this stage","The embryo grows too rapidly for simple diffusion to meet metabolic needs","To initiate the development of the nervous system","To prevent congenital heart defects"], ans:1 },
+  { s:1, q:"On which days does the heart typically begin beating and functioning?", opts:["Days 14–15","Days 18–19","Days 22–23","Days 28–30"], ans:2 },
+  { s:1, q:"The heart arises from which specific germ layer and region?", opts:["Paraxial mesoderm in the cervical region","Splanchnic mesoderm in the cardiogenic region","Somatic mesoderm in the neural plate","Endoderm in the horseshoe field"], ans:1 },
+  { s:1, q:"What embryonic process is responsible for merging the two endocardial tubes into a single primitive heart tube?", opts:["Cranial folding","Neural tube closure","Lateral embryonic folding","Gastrulation"], ans:2 },
+  { s:1, q:"The transverse pericardial sinus is formed around Day 28 by the breakdown of which structure?", opts:["The dorsal mesocardium","The angioblastic cords","The secondary heart field","The sinus venosus"], ans:0 },
+  { s:1, q:"Which layer of the early heart is responsible for forming the coronary vessels?", opts:["Endocardium","Myocardium","Epicardium","Cardiac jelly"], ans:2 },
+  { s:1, q:"According to the 'Regions of the Primitive Heart Tube' table, the Truncus arteriosus gives rise to the:", opts:["Right ventricle","Left ventricle","Atria","Ascending aorta and pulmonary trunk"], ans:3 },
+  { s:1, q:"If a congenital defect affects the development of the Bulbus cordis, which adult structure is most likely to be impacted?", opts:["The smooth part of the right atrium","The right ventricle","The left ventricle","The coronary arteries"], ans:1 },
+  { s:1, q:"Cardiac looping (Days 23–28) is essential because it:", opts:["Reorganizes the straight heart tube into a 3-D structure","Initiates the first heartbeat","Merges the bilateral endocardial tubes","Forms the angioblastic cords"], ans:0 },
+  { s:1, q:"The Sinus venosus eventually becomes which part of the adult heart?", opts:["The muscular part of the left atrium","The pulmonary trunk","The smooth part of the right atrium","The apex of the left ventricle"], ans:2 },
+  // SECTION C — Respiratory
+  { s:2, q:"The laryngotracheal diverticulum, which eventually becomes the trachea and lungs, develops from which embryonic structure during week 4?", opts:["Hindgut endoderm","Midgut mesoderm","Foregut endoderm","Ectodermal neural crest"], ans:2 },
+  { s:2, q:"What structure is responsible for the physical separation of the trachea from the esophagus?", opts:["Septum transversum","Tracheoesophageal septum","Pleuroperitoneal membrane","Dorsal mesentery"], ans:1 },
+  { s:2, q:"In the development of the pleural cavities, the visceral pleura is derived from which specific layer?", opts:["Somatic mesoderm","Splanchnic mesoderm","Surface ectoderm","Foregut endoderm"], ans:1 },
+  { s:2, q:"Which lung maturation stage is characterized by the beginning of vascularization and the formation of early sacs, occurring between 16–26 weeks?", opts:["Pseudoglandular","Canalicular","Terminal sac","Alveolar"], ans:1 },
+  { s:2, q:"At what point is surfactant production typically considered 'adequate' to prevent alveolar collapse?", opts:["16–20 weeks","20–22 weeks","26–28 weeks","32–36 weeks"], ans:3 },
+  { s:2, q:"Which specific cell type is responsible for the production of surfactant?", opts:["Type I pneumocytes","Goblet cells","Type II pneumocytes","Alveolar macrophages"], ans:2 },
+  { s:2, q:"Which of the following is NOT one of the four embryonic components that form the diaphragm?", opts:["Septum transversum","Pleuroperitoneal membranes","Tracheoesophageal folds","Dorsal mesentery of esophagus"], ans:2 },
+  { s:2, q:"A Congenital Diaphragmatic Hernia (CDH) most commonly results from the failure of which structure to fuse?", opts:["Septum transversum","Pleuroperitoneal membranes","Body wall ingrowth","Laryngotracheal diverticulum"], ans:1 },
+  { s:2, q:"The opening in the diaphragm for the Inferior Vena Cava (IVC) occurs at which vertebral level?", opts:["T8","T10","T12","L1"], ans:0 },
+  { s:2, q:"During development, the bronchial buds grow into which specific portion of the intraembryonic coelom?", opts:["Pericardial cavity","Pericardioperitoneal canals","Peritoneal cavity","Transverse pericardial sinus"], ans:1 },
+  // SECTION D — GI
+  { s:3, q:"During gastrulation, which germ layer is responsible for forming the epithelial lining of the digestive tract?", opts:["Ectoderm","Mesoderm","Endoderm","Neural crest"], ans:2 },
+  { s:3, q:"Which artery is the primary blood supply for the embryonic Midgut?", opts:["Celiac artery","Superior mesenteric artery","Inferior mesenteric artery","Renal artery"], ans:1 },
+  { s:3, q:"In the developing embryo, the ventral mesentery is associated with which section of the gut tube?", opts:["Foregut only","Midgut only","Hindgut only","The entire gut tube"], ans:0 },
+  { s:3, q:"The stomach begins its development as what shape before it starts to rotate?", opts:["A circular sac","A spindle-shaped dilation","A flattened plate","A straight endodermal tube"], ans:1 },
+  { s:3, q:"What is the primary reason for 'physiological herniation,' where the midgut moves into the umbilical cord?", opts:["To allow for the development of the lungs","Limited space in the abdominal cavity","To facilitate the rupture of the cloacal membrane","To initiate the 180° clockwise rotation"], ans:1 },
+  { s:3, q:"While inside the umbilical cord (Weeks 6–10), the midgut undergoes its first rotation. What is the degree and direction?", opts:["90° clockwise","90° counterclockwise","180° counterclockwise","270° clockwise"], ans:1 },
+  { s:3, q:"By the time the midgut has fully returned to the abdominal cavity and completed its rotation, what is the total degrees of counterclockwise rotation?", opts:["90°","180°","270°","360°"], ans:2 },
+  { s:3, q:"The process of 'recanalization,' which restores the lumen of the intestines after temporary epithelial proliferation, is typically completed by which week?", opts:["Week 4","Week 6","Week 8","Week 12"], ans:3 },
+  { s:3, q:"In Hindgut development, the urorectal septum divides the cloaca into which two structures?", opts:["Foregut and Midgut","Urogenital sinus and rectoanal canal","Esophagus and trachea","Parietal and visceral pleura"], ans:1 },
+  { s:3, q:"How are 'retroperitoneal' organs defined in the adult GI system?", opts:["They are suspended by mesenteries","They are located entirely within the thoracic cavity","They are fixed to the posterior abdominal wall","They lack a blood supply from the mesenteric arteries"], ans:2 },
+];
+
+const SECTIONS = [
+  { cls:'a', label:'Section A', title:'Reproductive Medicine & Infertility', range:'1–10' },
+  { cls:'b', label:'Section B', title:'Cardiovascular Embryology', range:'11–20' },
+  { cls:'c', label:'Section C', title:'Respiratory Embryology', range:'21–30' },
+  { cls:'d', label:'Section D', title:'Gastrointestinal Embryology', range:'31–40' },
+];
+const LETTERS = ['A','B','C','D'];
+
+// ─── MATCHING DATA ───
+const MATCHING_REGIONS = [
+  'Truncus arteriosus',
+  'Bulbus cordis',
+  'Primitive ventricle',
+  'Primitive atrium',
+  'Sinus venosus',
+];
+const MATCHING_ANSWERS = [
+  'Ascending aorta and pulmonary trunk',
+  'Right ventricle',
+  'Left ventricle',
+  'Atria',
+  'Smooth part of right atrium',
+];
+const MATCHING_DERIVATIVES_POOL = [
+  'Ascending aorta and pulmonary trunk',
+  'Right ventricle',
+  'Left ventricle',
+  'Atria',
+  'Smooth part of right atrium',
+  'Coronary sinus',
+  'Left atrium',
+  'Pulmonary trunk only',
+];
+
+let userAnswers = new Array(40).fill(null);
+let submitted = false;
+let saScores = { matching: null, atrial: null, diaphragm: null };
+let saFeedback = { atrial: '', diaphragm: '' };
+
+// ─── BUILD MC QUIZ ───
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  let currentSection = -1;
+
+  QUESTIONS.forEach((q, i) => {
+    if (q.s !== currentSection) {
+      currentSection = q.s;
+      const sec = SECTIONS[q.s];
+      const sh = document.createElement('div');
+      sh.className = `section-header ${sec.cls}`;
+      sh.innerHTML = `<div class="section-num">${sec.label} — Questions ${sec.range}</div><h2>${sec.title}</h2>`;
+      container.appendChild(sh);
+    }
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `card-${i}`;
+
+    const top = document.createElement('div');
+    top.className = 'question-top';
+    top.innerHTML = `<span class="q-num">${i+1}</span><span class="q-text">${q.q}</span>`;
+    card.appendChild(top);
+
+    const opts = document.createElement('div');
+    opts.className = 'options';
+    q.opts.forEach((opt, j) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.id = `opt-${i}-${j}`;
+      btn.innerHTML = `<span class="option-letter">${LETTERS[j]}</span><span>${opt}</span>`;
+      btn.onclick = () => selectOption(i, j);
+      opts.appendChild(btn);
+    });
+    card.appendChild(opts);
+
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    fb.id = `fb-${i}`;
+    card.appendChild(fb);
+    container.appendChild(card);
+  });
+}
+
+// ─── BUILD MATCHING ───
+function buildMatching() {
+  const tbody = document.getElementById('matchingBody');
+  MATCHING_REGIONS.forEach((region, i) => {
+    const tr = document.createElement('tr');
+    const optionsHTML = `<option value="">— Select —</option>` +
+      MATCHING_DERIVATIVES_POOL.map(d => `<option value="${d}">${d}</option>`).join('');
+    tr.innerHTML = `
+      <td><span class="region-label">${region}</span></td>
+      <td>
+        <select class="match-select" id="match-${i}" onchange="updateProgress()">
+          ${optionsHTML}
+        </select>
+        <div class="match-correct-ans" id="match-correct-${i}"></div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function selectOption(qIdx, optIdx) {
+  if (submitted) return;
+  userAnswers[qIdx] = optIdx;
+  QUESTIONS[qIdx].opts.forEach((_, j) => {
+    document.getElementById(`opt-${qIdx}-${j}`).classList.remove('selected');
+  });
+  document.getElementById(`opt-${qIdx}-${optIdx}`).classList.add('selected');
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const matchingDone = MATCHING_REGIONS.every((_, i) => {
+    const sel = document.getElementById(`match-${i}`);
+    return sel && sel.value !== '';
+  });
+  const atrialDone = document.getElementById('saAtrial').value.trim().length > 10;
+  const diaphragmDone = document.getElementById('saDiaphragm').value.trim().length > 10;
+
+  const totalDone = answered + (matchingDone ? MATCHING_REGIONS.length : 0) + (atrialDone ? 1 : 0) + (diaphragmDone ? 1 : 0);
+  const totalQ = 40 + MATCHING_REGIONS.length + 2;
+  document.getElementById('progressBar').style.width = `${(totalDone / totalQ) * 100}%`;
+  document.getElementById('scorePct').textContent = `answered: ${answered} / 40`;
+
+  const allMCDone = answered === 40;
+  document.getElementById('submitBtn').disabled = !(allMCDone && matchingDone && atrialDone && diaphragmDone);
+}
+
+// ─── SUBMIT ───
+async function submitQuiz() {
+  if (submitted) return;
+  submitted = true;
+  document.getElementById('submitBtn').disabled = true;
+
+  // Grade MC
+  let mcScore = 0;
+  const sectionScores = [0, 0, 0, 0];
+  QUESTIONS.forEach((q, i) => {
+    const userAns = userAnswers[i];
+    const correct = userAns === q.ans;
+    if (correct) { mcScore++; sectionScores[q.s]++; }
+    QUESTIONS[i].opts.forEach((_, j) => {
+      const btn = document.getElementById(`opt-${i}-${j}`);
+      btn.disabled = true;
+      btn.classList.remove('selected');
+      if (j === q.ans) btn.classList.add(userAns === j ? 'correct' : 'reveal-correct');
+      else if (j === userAns && userAns !== q.ans) btn.classList.add('wrong');
+    });
+    const fb = document.getElementById(`fb-${i}`);
+    if (correct) { fb.className = 'feedback correct'; fb.textContent = '✓ Correct'; }
+    else { fb.className = 'feedback wrong'; fb.textContent = `✗ Incorrect — Correct answer: ${LETTERS[q.ans]}`; }
+  });
+  document.getElementById('scoreLive').textContent = `${mcScore} / 40`;
+  document.getElementById('scorePct').textContent = `${Math.round((mcScore/40)*100)}%`;
+
+  // Grade matching
+  let matchScore = 0;
+  MATCHING_REGIONS.forEach((_, i) => {
+    const sel = document.getElementById(`match-${i}`);
+    sel.disabled = true;
+    const userVal = sel.value;
+    const correct = userVal === MATCHING_ANSWERS[i];
+    if (correct) { matchScore++; sel.classList.add('match-correct'); }
+    else {
+      sel.classList.add('match-wrong');
+      const hint = document.getElementById(`match-correct-${i}`);
+      hint.textContent = `✓ Correct: ${MATCHING_ANSWERS[i]}`;
+      hint.style.display = 'block';
+    }
+  });
+  saScores.matching = matchScore;
+
+  // Show grading overlay
+  document.getElementById('gradingOverlay').classList.add('show');
+
+  // Grade SA with AI
+  try {
+    document.getElementById('gradingStatus').textContent = 'Grading Atrial Septation response…';
+    const atrialScore = await gradeWithAI('atrial');
+    document.getElementById('gradingStatus').textContent = 'Grading Diaphragm response…';
+    const diaphragmScore = await gradeWithAI('diaphragm');
+    saScores.atrial = atrialScore;
+    saScores.diaphragm = diaphragmScore;
+  } catch (e) {
+    saScores.atrial = 0;
+    saScores.diaphragm = 0;
+    console.error('AI grading error:', e);
+  }
+
+  document.getElementById('gradingOverlay').classList.remove('show');
+  showFinalResults(mcScore, sectionScores);
+}
+
+// ─── AI GRADING ───
+async function gradeWithAI(type) {
+  const textarea = document.getElementById(type === 'atrial' ? 'saAtrial' : 'saDiaphragm');
+  textarea.disabled = true;
+  const userResponse = textarea.value.trim();
+
+  const prompts = {
+    atrial: {
+      maxMarks: 6,
+      system: `You are a lenient but fair embryology professor grading a short answer question. The student must identify the 6 steps of atrial septation. Award 1 mark per step that is reasonably identified, even if the wording is not exact. Be generous — if the concept is present, award the mark.
+
+The 6 correct steps (in order) are:
+1. Formation of the endocardial cushions & atrioventricular canals
+2. Making septum primum and foramen(s) — including foramen primum/secundum
+3. The septum secundum develops
+4. Creation of the interventricular septum
+5. Formation of outflow tract + truncal ridges
+6. Truncal ridges fuse & making of future aorta/pulmonary trunk
+
+Return ONLY valid JSON in this exact format:
+{"score": <number 0-6>, "stepResults": [{"step": "Step 1 name", "awarded": true/false, "comment": "brief reason"}, ...], "overallFeedback": "1-2 sentence summary"}`,
+      userPrompt: `Grade this student response for the 6 steps of atrial septation:\n\n"${userResponse}"`
+    },
+    diaphragm: {
+      maxMarks: 5,
+      system: `You are a lenient but fair embryology professor grading a short answer question about diaphragm development. The student must name the 4 embryonic components and briefly describe what each contributes. Award marks generously if the core concept is present.
+
+The 4 components and their contributions are:
+1. Septum transversum → forms the central tendon of the diaphragm
+2. Pleuroperitoneal membranes → close the pleuroperitoneal canals (separate thoracic and abdominal cavities)
+3. Dorsal mesentery of esophagus → forms the crura of the diaphragm (median/posterior portion)
+4. Muscular ingrowth from body wall → forms the peripheral muscular portion of the diaphragm
+
+Scoring: 1 mark per component correctly named with any mention of its contribution (4 marks possible). Award a 5th mark if the student correctly identifies all 4 components, even if contributions are imprecise.
+
+Return ONLY valid JSON in this exact format:
+{"score": <number 0-5>, "componentResults": [{"component": "Component name", "awarded": true/false, "comment": "brief reason"}, ...], "overallFeedback": "1-2 sentence summary"}`,
+      userPrompt: `Grade this student response about the development of the diaphragm:\n\n"${userResponse}"`
+    }
+  };
+
+  const p = prompts[type];
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: p.system,
+      messages: [{ role: 'user', content: p.userPrompt }]
+    })
+  });
+
+  const data = await response.json();
+  const rawText = data.content.map(c => c.text || '').join('');
+  const clean = rawText.replace(/```json|```/g, '').trim();
+  const parsed = JSON.parse(clean);
+
+  // Render feedback
+  const scoreEl = document.getElementById(type === 'atrial' ? 'scoreAtrial' : 'scoreDiaphragm');
+  const bodyEl = document.getElementById(type === 'atrial' ? 'feedbackAtrialBody' : 'feedbackDiaphragmBody');
+  const panelEl = document.getElementById(type === 'atrial' ? 'feedbackAtrial' : 'feedbackDiaphragm');
+
+  scoreEl.textContent = `${parsed.score} / ${p.maxMarks}`;
+
+  const items = parsed.stepResults || parsed.componentResults || [];
+  let html = '';
+  items.forEach(item => {
+    const awarded = item.awarded;
+    const label = item.step || item.component;
+    html += `<div class="criterion ${awarded ? 'got' : 'missed'}" style="margin-bottom:10px; padding: 10px 14px; border-left: 3px solid ${awarded ? '#1e5c3a' : '#e0b0b0'}; background: ${awarded ? '#edf7f1' : '#fdf7f7'}; border-radius: 0 6px 6px 0;">
+      <span style="font-weight:600; font-size:13px; color:${awarded ? '#1e5c3a' : '#8b1a1a'}">${awarded ? '✓' : '✗'} ${label}</span>
+      <span style="font-size:12px; color: #5c5650; display:block; margin-top:3px;">${item.comment}</span>
+    </div>`;
+  });
+  if (parsed.overallFeedback) {
+    html += `<div style="margin-top:12px; padding:10px 14px; background:#f8f6ff; border-radius:6px; font-size:13px; color:#4a3d7a; font-style:italic;">${parsed.overallFeedback}</div>`;
+  }
+  bodyEl.innerHTML = html;
+  panelEl.classList.add('show');
+
+  return parsed.score;
+}
+
+// ─── FINAL RESULTS ───
+function showFinalResults(mcScore, sectionScores) {
+  const matchScore = saScores.matching || 0;
+  const atrialScore = saScores.atrial || 0;
+  const diaphragmScore = saScores.diaphragm || 0;
+  const totalSA = matchScore + atrialScore + diaphragmScore;
+  const total = mcScore + totalSA;
+  const pct = Math.round((total / 56) * 100);
+
+  let grade = '';
+  if (pct >= 90) grade = 'Outstanding — A+';
+  else if (pct >= 80) grade = 'Excellent — A';
+  else if (pct >= 70) grade = 'Good — B';
+  else if (pct >= 60) grade = 'Satisfactory — C';
+  else grade = 'Needs Review — Below 60%';
+
+  document.getElementById('finalScoreDisplay').innerHTML = `${total} <span>/ 56</span>`;
+  document.getElementById('finalGrade').textContent = `${pct}% — ${grade}`;
+  document.getElementById('scoreLive').textContent = `${total} / 56`;
+
+  const secNames = ['Reproductive Med.','Cardiovascular','Respiratory','GI Embryology'];
+  const grid = document.getElementById('breakdownGrid');
+  grid.innerHTML = [
+    ...sectionScores.map((s, i) => `<div class="breakdown-item"><div class="bi-label">${secNames[i]}</div><div class="bi-score">${s} / 10</div></div>`),
+    `<div class="breakdown-item"><div class="bi-label">SA·1 Matching</div><div class="bi-score">${matchScore} / 5</div></div>`,
+    `<div class="breakdown-item"><div class="bi-label">SA·2 Atrial Septation</div><div class="bi-score">${atrialScore} / 6</div></div>`,
+    `<div class="breakdown-item"><div class="bi-label">SA·3 Diaphragm</div><div class="bi-score">${diaphragmScore} / 5</div></div>`,
+    `<div class="breakdown-item" style="grid-column: span 2; background: rgba(168,197,187,0.12); border-color: rgba(168,197,187,0.3)"><div class="bi-label">Total Score</div><div class="bi-score" style="font-size:28px">${total} / 56 <span style="font-size:14px;color:#8a8680">(${pct}%)</span></div></div>`,
+  ].join('');
+
+  document.getElementById('finalResults').classList.add('show');
+  document.getElementById('submitBtn').style.display = 'none';
+  document.getElementById('finalResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── RESET ───
+function resetQuiz() {
+  userAnswers = new Array(40).fill(null);
+  submitted = false;
+  saScores = { matching: null, atrial: null, diaphragm: null };
+  document.getElementById('finalResults').classList.remove('show');
+  document.getElementById('submitBtn').style.display = 'inline-block';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('scoreLive').textContent = '0 / 0';
+  document.getElementById('scorePct').textContent = 'answered: 0 / 40';
+  document.getElementById('progressBar').style.width = '0%';
+
+  // Reset matching
+  document.getElementById('matchingBody').innerHTML = '';
+  buildMatching();
+
+  // Reset SA text areas and feedback
+  ['saAtrial','saDiaphragm'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.disabled = false;
+  });
+  ['feedbackAtrial','feedbackDiaphragm'].forEach(id => {
+    document.getElementById(id).classList.remove('show');
+  });
+  document.getElementById('scoreAtrial').textContent = '— / 6';
+  document.getElementById('scoreDiaphragm').textContent = '— / 5';
+
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Wire up SA textareas for progress tracking
+document.getElementById('saAtrial').addEventListener('input', updateProgress);
+document.getElementById('saDiaphragm').addEventListener('input', updateProgress);
+
+buildQuiz();
+buildMatching();
+</script>
+</body>
+</html>
